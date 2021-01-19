@@ -1,0 +1,14 @@
+{
+  "name": "func-line",
+  "version": "0.0.2",
+  "description": "",
+  "main": "index.js",
+  "bin": {
+    "func-line": "bin/index.js"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "mike",
+  "license": "ISC"
+}
