@@ -7,7 +7,7 @@ function getContent(dir, funcLineMap = {}) {
     const fullPath = `${dir}/${file}`;
     const fileInfo = fs.statSync(fullPath);
 
-    console.log(fullPath);
+    console.log('fullPath: ', fullPath);
 
     if (fileInfo.isFile()) {
       readContentFromMd(fullPath, funcLineMap);
@@ -38,9 +38,10 @@ function readContentFromMd(file, funcLineMap) {
   const content = fs.readFileSync(file, 'utf-8');
   const contentList = content.split('\n');
   const fileName = getFileName(file);
-  console.log(file.replace(__dirname, ''));
+  // console.log(file.replace(__dirname, ''));
 
   const relativePath = file.replace(__dirname, '');
+
   /**
    * 分别对应以下几种情况：
    * function test(){}
@@ -48,20 +49,34 @@ function readContentFromMd(file, funcLineMap) {
    * const test = function() {}
    */
   const reg = /(.*function\s+([^(\s]+?)[{|(]|export\s+const\s+([^\s]+?)\s*=\s*|const\s+(.*?)\s+=\s+function)/;
-  // getAnnotation(content, {});
+  
+  addAttributeForMap(contentList, fileName, relativePath, funcLineMap, reg)
+ 
+  /**
+   * 分别对应以下集中情况：
+   * Share.initConfig = function() {}
+   * Share.initConfig = (src) => {}
+   */
+  const extraReg = /(\.([^\.]+)\s+=\s+(function|.+=>))/
+  addAttributeForMap(contentList, fileName, relativePath, funcLineMap, extraReg)
 
+  return funcLineMap;
+}
+
+// 为funcLineMap添加属性
+function addAttributeForMap(contentList, fileName, relativePath, funcLineMap, reg) {
   contentList.map((item, index) => {
     const regMatch = item.match(reg);
-    // console.log(regMatch);
 
     if (regMatch && (regMatch[2] || regMatch[3] || regMatch[4])) {
       const funcName = regMatch[2] || regMatch[3] || regMatch[4];
-      // console.log(funcName, index);
+      const key = `${fileName}-${funcName}`;
 
-      funcLineMap[`${fileName}-${funcName}`] = `${relativePath}#L${index + 1}`;
+      if (!funcLineMap[key]) {
+        funcLineMap[key] = `${relativePath}#L${index + 1}`;
+      }
     }
   });
-  return funcLineMap;
 }
 
 // function getAnnotation(fileContent, fileAnnotationMap) {

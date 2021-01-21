@@ -1,6 +1,6 @@
 {
   "name": "func-line-cli",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "获取函数所在行号的命令行工具",
   "main": "index.js",
   "bin": {
