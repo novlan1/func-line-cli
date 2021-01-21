@@ -29,6 +29,13 @@ func-line ./src/utils
 ```
 每一行的含义为：`${文件名}-${函数名}: ${文件路径}#L${行号}`
 
+### 搭配使用
+
+[v-func-line](https://github.com/novlan1/v-func-line)
+
+### Demo文档
+
+点击[这里](https://novlan1.github.io/v-func-line/)可以查看插件效果
 
 
 
